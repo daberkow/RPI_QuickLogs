@@ -1,0 +1,1 @@
+QuickLogs is a quick one button logging tool for helpdesk @ rpi. All stuff, techinical terms, is pushed to the mysql database (no that is no the password in use on the server). Double tap fix was user could quickly accidently add 1 entry twice. javascript fix put in.
