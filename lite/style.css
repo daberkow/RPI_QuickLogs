@@ -1,0 +1,156 @@
+body {
+	width: 95%;
+	background-color: #dfdfdf;
+}
+
+#main {
+	margin: 15px;
+	padding: 15px;
+	border-style: solid;
+	border-width: 1px;
+	min-width: 475px;
+	max-width: 600px;
+	background-color: white;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#left {
+	border-style: solid;
+	border-width: 1px;
+	text-align: center;
+	float: left;
+	left: 40px;
+	position: relative;
+	height: 90%;
+	width: 35%;
+	background-color: #8fc5ff;
+}
+
+#right {
+	border-style: solid;
+	border-width: 1px;
+	text-align: center;
+	right: 40px;
+	float: right;
+	position: relative;
+	height: 90%;
+	width: 35%;
+	background-color: #ff566b;
+}
+
+#row {
+	max-height: 100px;
+	margin: 5px;
+	text-align: center;
+	font-size: 150%;
+	font-family: Helvetica, Verdana, Arial, sans-serif;
+	height: 100px;
+	width: 100%;
+	position: relative;
+}
+
+#title {
+	text-decoration: none;
+	text-align: center;
+	height: 50px;
+	width: 100%;
+	position: relative;
+}
+
+text {
+	text-align: center;
+	position: relative;
+	vertical-align: middle;
+	
+}
+
+a.labels {
+	font-size: 14px;
+	text-decoration: underline;
+	font-style: normal;
+	font-weight: normal;
+	float: none;
+}
+a.links {
+	color: black;
+	font-style: normal;
+	font-weight: normal;
+	text-decoration: none;
+	
+}
+#logo {
+	text-decoration: none;
+	color: black;
+	margin-left: 12px;
+	font-style: italic;
+	font-family: cursive;
+	font-size: 28px;
+	float: left;
+}
+#result {
+	margin-top: 20px;
+	margin-right: 12px;
+	font-size: 12px;
+	font-family: monospace;
+	float: right;
+}
+
+hr {
+	margin: 4px;
+}
+
+#selection_of_options0 {
+	width: 50%;
+	position: relative;
+}
+#selection_of_options1 {
+	width: 50%;
+	float: right;
+}
+
+#buttonz {
+	text-align: center;
+}
+
+#footer {
+	width: 100%;
+	height: 5%;
+	}
+
+#Stats {
+	position: relative;
+	width: 100px;
+	text-align: left;
+	float: left;
+}
+#version {
+	font-size: 12px;
+	position: relative;
+	width: 50px;
+	text-align: center;
+	float: left;
+	margin-left: 30%;
+}
+#switch_ver {
+	position: relative;
+	width: 150px;
+	text-align: right;
+	float: right;
+}
+
+div#left select {
+	height: 30%;
+	width: 90%;
+	margin-top: 20%;
+	margin-bottom: 20%;
+}
+div#right select {
+	height: 30%;
+	width: 90%;
+	margin-top: 20%;
+	margin-bottom: 20%;
+}
+div.chart {
+	text-align: center;
+}

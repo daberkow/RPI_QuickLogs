@@ -1,0 +1,155 @@
+body {
+	width: 95%;
+	background-color: #dfdfdf;
+}
+
+#main {
+	margin: 15px;
+	padding: 15px;
+	border-style: solid;
+	border-width: 1px;
+	min-width: 475px;
+	max-width: 1000px;
+	background-color: white;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#title {
+	text-align: center;
+	height: 50px;
+	width: 100%;
+	position: relative;
+}
+
+#logo {
+	margin-left: 12px;
+	font-style: italic;
+	font-family: cursive;
+	font-size: 28px;
+	float: left;
+}
+
+#search {
+	float: right;
+	padding-top: 1%;
+}
+
+hr {
+	margin: 4px;
+}
+
+#footer {
+	width: 100%;
+	height: 5%;
+	}
+
+#Stats {
+	position: relative;
+	width: 100px;
+	text-align: left;
+	float: left;
+}
+#version {
+	position: relative;
+	width: 50px;
+	text-align: center;
+	float: left;
+	margin-left: 30%;
+}
+#switch_ver {
+	position: relative;
+	width: 150px;
+	text-align: right;
+	float: right;
+
+}
+
+table {
+	padding-left: 10%;
+}
+
+td {
+	width: 200px;
+}
+
+p.output {
+	
+}
+p.label {
+	display: inline;
+	padding-left: 10%;
+	
+}
+#div_label {
+	height: 30px;
+	width: 200px;
+	display: inline;
+}
+
+#category {
+	height: 30px;
+	width: 100%;
+}
+select#cat_selectable {
+	float: right;
+	position: relative;
+	display: inline;
+	right: 40%;
+	width: 30%;
+	
+}
+
+
+#summary {
+	height: 30px;
+	width: 100%;
+}
+input#summary_selectable {
+	float: right;
+	position: relative;
+	display: inline;
+	right: 40%;
+	width: 30%;
+}
+
+#problem {
+	height: 100px;
+	width: 100%;
+	padding-bottom: 20px;
+}
+textarea#problem_selectable {
+	float: right;
+	position: relative;
+	display: inline;
+	right: 10%;
+	width: 60%;
+	height: 100%;
+}
+
+
+#solution {
+	height: 100px;
+	width: 100%;
+}
+textarea#solution_selectable {
+	float: right;
+	position: relative;
+	display: inline;
+	right: 10%;
+	width: 60%;
+	height: 100%;
+}
+
+#buttonz {
+	width: 100%;
+	height: 5%;
+}
+input#cmdSubmit {
+	min-width: 75px;
+	width: 8%;
+	margin: auto;
+	position: relative;
+	top: 50%;
+	left: 80%;
+}
