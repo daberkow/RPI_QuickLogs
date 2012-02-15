@@ -1,9 +1,5 @@
 <?PHP header("location: ./lite/");
-
-//Things I need
-// admin remove admins
-
-
+// Dan Berkowitz, berkod2@rpi.edu, dansberkowitz@gmail.com, Feb 2012
 
 
  ?>

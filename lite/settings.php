@@ -1,5 +1,7 @@
 <?PHP
-
+	// Dan Berkowitz, berkod2@rpi.edu, dansberkowitz@gmail.com, Feb 2012
+	include '../core.php';
+	
 	/// This will go and fetch the default display, that relies on the `display` table index 0 being set with boxes
 	function get_default()
 	{
@@ -9,7 +11,7 @@
 			//successful
 			$row = mysql_fetch_array($result); //Should be run once
 			
-			for($i = 1; $i < 9; $i++) //run through the boxes
+			for($i = 1; $i < 11; $i++) //run through the boxes
 			{
 				$Button_Description[$i . "ID"] = $row['Box' . $i];
 				$why_bool = mysql_query("SELECT `problem` FROM `Types` WHERE `index`='" . $row['Box' . $i] . "' AND `disabled`=0 LIMIT 1");
@@ -30,7 +32,7 @@
 			{
 				//successful
 				$row = mysql_fetch_array($result); //Should be run once
-				for($i = 1; $i < 9; $i++)
+				for($i = 1; $i < 11; $i++)
 				{
 					$Button_Description[$i . "ID"] = $row['Box' . $i];
 					$why_bool = mysql_query("SELECT `problem` FROM `Types` WHERE `index`='" . $row['Box' . $i] . "' AND `disabled`=0 LIMIT 1");
@@ -47,13 +49,12 @@
 	
 	include_once '../cas/CAS.php';
 	
-	phpCAS::client(CAS_VERSION_2_0,'login.rpi.edu',443,'/cas/');
+	phpCAS::client(CAS_VERSION_2_0,'cas-auth.rpi.edu',443,'/cas/');
 	
 	// SSL!
-	phpCAS::setCasServerCACert("cas-auth.rpi.edu");
+	phpCAS::setCasServerCACert("../cas-auth.rpi.edu");
 	
-	mysql_connect("localhost", "QuickLogs", "sera5jL6XVRsuXHG") or die("Could Not Connect To MYSQL");
-	mysql_select_db("QuickLogs") or die ("Could Not Connect to DATABASE");
+	QuickLogs::db_connect();
 	
 	//Assume that they arent a admin, then if they have authenicated take a look
 	$admin=false;
@@ -79,7 +80,7 @@
 		$row = mysql_fetch_array($settings);
 		if ($row['Active'] == "1")//forces same options
 		{
-			$Button_Description = get_default();
+			$Button_Description = get_customized();
 			$Customize = false;
 		}else{
 			$Button_Description = get_customized();
@@ -90,7 +91,8 @@
 		$Customize = false;
 	}
 	//Closing connections is always good
-	mysql_close();
+	//Exept when page needs it again anyway
+	//QuickLogs::db_disconnect();
 
 ?>
 
@@ -149,8 +151,8 @@
 				if (!$Customize)
 					echo "Custom Loaded but not in use";
 					
-				mysql_connect("localhost", "QuickLogs", "sera5jL6XVRsuXHG") or die("Could Not Connect To MYSQL");
-				mysql_select_db("QuickLogs") or die ("Could Not Connect to DATABASE");
+				//removed mysql disconenct and reconnect	
+					
 				$result = mysql_query("SELECT `index`,`problem` FROM `Types` WHERE `disabled`=0 LIMIT 0, 100"); //limit just in case
 				//error_reporting(E_ALL);
 				$OPTIONS = array();
@@ -263,6 +265,32 @@
 						for($i = 0; $i < count($OPTIONS); $i++)
 						{
 							if ($Button_Description["8ID"] == $OPTIONS_ID[$i])
+							{
+								echo "<option value=" . $OPTIONS_ID[$i] . " selected='selected'>" . $OPTIONS[$i] . "</option>";
+							}else{
+								echo "<option value=" . $OPTIONS_ID[$i] . ">" . $OPTIONS[$i] . "</option>";
+							}
+						}
+						?></select></div></a>
+				</div>
+				<div id="row">
+					<a class="links"><div id="left" ><select name='Box9' id='Box9'>
+						<?PHP 
+						for($i = 0; $i < count($OPTIONS); $i++)
+						{
+							if ($Button_Description["9ID"] == $OPTIONS_ID[$i])
+							{
+								echo "<option value=" . $OPTIONS_ID[$i] . " selected='selected'>" . $OPTIONS[$i] . "</option>";
+							}else{
+								echo "<option value=" . $OPTIONS_ID[$i] . ">" . $OPTIONS[$i] . "</option>";
+							}
+						}
+						?></select></div></a>
+					<a class="links"><div id="right" ><select name='Box10' id='Box10'>
+						<?PHP 
+						for($i = 0; $i < count($OPTIONS); $i++)
+						{
+							if ($Button_Description["10ID"] == $OPTIONS_ID[$i])
 							{
 								echo "<option value=" . $OPTIONS_ID[$i] . " selected='selected'>" . $OPTIONS[$i] . "</option>";
 							}else{
@@ -389,14 +417,39 @@
 									}
 				echo				"</select></div></a>
 							</div>
+							<div id='row'>
+								<a class='links'><div id='left' ><select name='Box9' id='Box9'>";
+							
+							for($i = 0; $i < count($OPTIONS); $i++)
+									{
+										if ($def_OPTIONS["9ID"] == $OPTIONS_ID[$i])
+										{
+											echo "<option value=" . $OPTIONS_ID[$i] . " selected='selected'>" . $OPTIONS[$i] . "</option>";
+										}else{
+											echo "<option value=" . $OPTIONS_ID[$i] . ">" . $OPTIONS[$i] . "</option>";
+										}
+									}
+				echo				"</select></div></a>
+								<a class='links'><div id='right' ><select name='Box10' id='Box10'>";
+									
+									for($i = 0; $i < count($OPTIONS); $i++)
+									{
+										if ($def_OPTIONS["10ID"] == $OPTIONS_ID[$i])
+										{
+											echo "<option value=" . $OPTIONS_ID[$i] . " selected='selected'>" . $OPTIONS[$i] . "</option>";
+										}else{
+											echo "<option value=" . $OPTIONS_ID[$i] . ">" . $OPTIONS[$i] . "</option>";
+										}
+									}
+				echo				"</select></div></a>
+							</div>
+							
 							<div id='buttonz'>
 									<input TYPE='submit' id='cmdSubmit' VALUE='Update Settings'/>
 							</div>
 						</form>
 						<hr>
 						<p>Enabled Options(reload page to make selectable):</p>";
-						mysql_connect("localhost", "QuickLogs", "sera5jL6XVRsuXHG") or die("Could Not Connect To MYSQL");
-						mysql_select_db("QuickLogs") or die ("Could Not Connect to DATABASE");
 
 						$result = mysql_query("SELECT `index`,`problem` FROM `Types` WHERE `disabled`<'2' LIMIT 0, 100"); //limit just in case
 						//error_reporting(E_ALL);
@@ -438,6 +491,12 @@
 							echo "</div>";
 						}
 						
+						
+						echo "<p>New Option:</p><form action='./change.php' method='post'>
+							<input class='input_box' type='text' name='New_term' id='New_term'/>
+						<input TYPE='submit' id='cmdSubmit' VALUE='New Option'/></form>";
+						
+						
 						echo "<p>Delete Option:</p><form action='./change.php' method='post'><select name='Kill' id='Kill'>";
 						for($i = 0; $i < count($OPTIONS); $i++)
 						{
@@ -458,9 +517,11 @@
 						echo "<a href='./login.php' class='labels'>Login</a>";
 					}
 					if ($Customize || $admin) { echo "<p style='margin:0;'><a href='./settings.php' class='labels'>Settings</a></p>"; }
+					
+					QuickLogs::db_disconnect();
 				?>	
 				</div>
-				<div id="version">v3.0</div>
+				<div id="version">v3.1 <a href="https://github.com/daberkow/QuickLogs">Source</a></a></div>
 				<div id="switch_ver">
 					<a href="http://j2ee7.server.rpi.edu:8080/helpdesk/stylesheets/welcome.faces" class="labels"> Send in a Ticket </a>
 					<p style="margin: 0;"><a href="./stats.php" class="labels">See Stats</a></p>

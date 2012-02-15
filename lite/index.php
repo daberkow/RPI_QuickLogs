@@ -1,4 +1,5 @@
 <?PHP
+	// Dan Berkowitz, berkod2@rpi.edu, dansberkowitz@gmail.com, Feb 2012
 	/// This will go and fetch the default display, that relies on the `display` table index 0 being set with boxes
 	function get_default()
 	{
@@ -9,7 +10,7 @@
 			//successful
 			$row = mysql_fetch_array($result); //Should be run once
 			
-			for($i = 1; $i < 9; $i++) //run through the boxes
+			for($i = 1; $i < 11; $i++) //run through the boxes
 			{
 				$Button_Description[$i . "ID"] = $row['Box' . $i];
 				$why_bool = mysql_query("SELECT `problem` FROM `Types` WHERE `index`='" . $row['Box' . $i] . "' AND `disabled`=0 LIMIT 1");
@@ -30,7 +31,7 @@
 			{
 				//successful
 				$row = mysql_fetch_array($result); //Should be run once
-				for($i = 1; $i < 9; $i++)
+				for($i = 1; $i < 11; $i++)
 				{
 					$Button_Description[$i . "ID"] = $row['Box' . $i];
 					$why_bool = mysql_query("SELECT `problem` FROM `Types` WHERE `index`='" . $row['Box' . $i] . "' AND `disabled`=0 LIMIT 1");
@@ -45,16 +46,17 @@
 		}
 	}
 	
+	include '../core.php';
+	
+	QuickLogs::db_connect();
+
 	include_once '../cas/CAS.php';
 	
-	phpCAS::client(CAS_VERSION_2_0,'login.rpi.edu',443,'/cas/');
+	phpCAS::client(CAS_VERSION_2_0,'cas-auth.rpi.edu',443,'/cas/');
 	
 	// SSL!
-	phpCAS::setCasServerCACert("cas-auth.rpi.edu");
-	
-	mysql_connect("localhost", "QuickLogs", "sera5jL6XVRsuXHG") or die("Could Not Connect To MYSQL");
-	mysql_select_db("QuickLogs") or die ("Could Not Connect to DATABASE");
-	
+	phpCAS::setCasServerCACert("../cas-auth.rpi.edu");
+		
 	//Assume that they arent a admin, then if they have authenicated take a look
 	$admin=false;
 	if (phpCAS::isAuthenticated())
@@ -88,7 +90,7 @@
 		$Customize = false;
 	}
 	//Closing connections is always good
-	mysql_close();
+	QuickLogs::db_disconnect();
 	
 ?>
 
@@ -144,6 +146,10 @@
 				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["7ID"]; ?>)'><text><p><?PHP echo $Button_Description[7]; ?></p></text></div></a>
 				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["8ID"]; ?>)'><text><p><?PHP echo $Button_Description[8]; ?></p></text></div></a>
 			</div>
+			<div id="row">
+				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["9ID"]; ?>)'><text><p><?PHP echo $Button_Description[9]; ?></p></text></div></a>
+				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["10ID"]; ?>)'><text><p><?PHP echo $Button_Description[10]; ?></p></text></div></a>
+			</div>
 			<!-- NEW SECTION! -->
 			<hr>
 			<div id="footer">
@@ -160,7 +166,7 @@
 						if ($Customize || $admin) { echo "<p style='margin:0;'><a href='./settings.php' class='labels'>Settings</a></p>"; }
 					?>	
 				</div>
-				<div id="version">v3.0</div> <!-- YAY -->
+				<div id="version">v3.1 <a href="https://github.com/daberkow/QuickLogs">Source</a></a></div> <!-- YAY -->
 				<div id="switch_ver">
 					<a href="http://j2ee7.server.rpi.edu:8080/helpdesk/stylesheets/welcome.faces" class="labels"> Send in a Ticket </a>
 					<p style="margin: 0;"><a href="./stats.php" class="labels">See Stats</a></p>

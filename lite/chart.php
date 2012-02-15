@@ -1,19 +1,20 @@
 <?php
+	// Dan Berkowitz, berkod2@rpi.edu, dansberkowitz@gmail.com, Feb 2012
 	include "../libchart/classes/libchart.php";
+	include '../core.php';
 	
-	mysql_connect("localhost", "QuickLogs", "sera5jL6XVRsuXHG") or die("Could Not Connect To MYSQL");
-	mysql_select_db("QuickLogs") or die ("Could Not Connect to DATABASE");
+	QuickLogs::db_connect();
 	
 	switch ($_REQUEST['chart']) {
 		case "long":
 			header("Content-type: image/png");
 		
-			$chart = new VerticalBarChart(500,250);
+			$chart = new VerticalBarChart(500,300);
 			
 			$dataSet = new XYDataSet();
 			
 			//24 hours
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>(CURRENT_TIMESTAMP - " . 86400 . ")");
+			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . 86400 . ")");
 			if ($new_result)
 			{
 				$row = mysql_fetch_array($new_result);
@@ -21,7 +22,7 @@
 			}
 			
 			//A week
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>(CURRENT_TIMESTAMP - " . (86400 * 7) . ")");
+			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*7) . ")");
 			if ($new_result)
 			{
 				$row = mysql_fetch_array($new_result);
@@ -29,7 +30,7 @@
 			}
 			
 			//A month
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>(CURRENT_TIMESTAMP - " . (86400 * 30) . ")");
+			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*30) . ")");
 			if ($new_result)
 			{
 				$row = mysql_fetch_array($new_result);
@@ -37,7 +38,7 @@
 			}
 		
 			//90 Days
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>'(CURRENT_TIMESTAMP - " . (86400 * 90) . ")';");
+			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>'((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*90) . ")';");
 			if ($new_result)
 			{
 				$row = mysql_fetch_array($new_result);
@@ -45,7 +46,7 @@
 			}
 			
 			//365 Days
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>'(CURRENT_TIMESTAMP - " . (86400 * 365) . ")';");
+			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>'((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*365) . ")';");
 			if ($new_result)
 			{
 				$row = mysql_fetch_array($new_result);
@@ -58,9 +59,9 @@
 			
 		case "short":
 			header("Content-type: image/png");
-			$chart = new PieChart(500, 250);
+			$chart = new PieChart(500, 300);
 			$dataSet = new XYDataSet();
-			$new_result = mysql_query("SELECT DISTINCT `type` AS Type_ID FROM `Logs` WHERE `timestamp`>(CURRENT_TIMESTAMP - 2592000);");
+			$new_result = mysql_query("SELECT DISTINCT `type` AS Type_ID FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - 2592000);");
 			if ($new_result)
 			{
 				while ($row = mysql_fetch_array($new_result))
@@ -91,10 +92,10 @@
 			
 		case "users":
 			header("Content-type: image/png");
-			$chart = new PieChart(500, 250);
+			$chart = new PieChart(500, 300);
 			$dataSet = new XYDataSet();
 			
-			$new_result = mysql_query("SELECT DISTINCT `userid` AS User_ID FROM `Logs` WHERE `timestamp`>(CURRENT_TIMESTAMP - 2592000);");
+			$new_result = mysql_query("SELECT DISTINCT `userid` AS User_ID FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - 2592000);");
 			if ($new_result)
 			{
 				while ($row = mysql_fetch_array($new_result))
@@ -159,5 +160,5 @@
 			
 	}
 
-	mysql_close();
+	QuickLogs::db_disconnect();
 ?>

@@ -1,10 +1,11 @@
 <?PHP
+	// Dan Berkowitz, berkod2@rpi.edu, dansberkowitz@gmail.com, Feb 2012
 	include_once '../cas/CAS.php';
 	
-	phpCAS::client(CAS_VERSION_2_0,'login.rpi.edu',443,'/cas/');
+	phpCAS::client(CAS_VERSION_2_0,'cas-auth.rpi.edu',443,'/cas/');
 	
 	//SSL!
-	phpCAS::setCasServerCACert("cas-auth.rpi.edu");
+	phpCAS::setCasServerCACert("../cas-auth.rpi.edu");
 
 ?>
 
@@ -42,10 +43,10 @@
 					{
 						echo "<a href='./login.php' class='labels'>Login</a>";
 					}
-					if ($Customize || $admin) { echo "<p style='margin:0;'><a href='./settings.php' class='labels'>Settings</a></p>"; }
+					
 				?>	
 				</div>
-				<div id="version">v3.0</div>
+				<div id="version">v3.1 <a href="https://github.com/daberkow/QuickLogs">Source</a></a></div>
 				<div id="switch_ver">
 					<a href="http://j2ee7.server.rpi.edu:8080/helpdesk/stylesheets/welcome.faces" class="labels"> Send in a Ticket </a>
 					<p style="margin: 0;"><a href="./stats.php" class="labels">See Stats</a></p>

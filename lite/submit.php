@@ -1,22 +1,25 @@
 <?PHP
+	// Dan Berkowitz, berkod2@rpi.edu, dansberkowitz@gmail.com, Feb 2012
+	//Submit handles when jobs are sent in as done, and options changing
+
 	include_once '../cas/CAS.php';
+	include '../core.php';
 	
-	phpCAS::client(CAS_VERSION_2_0,'login.rpi.edu',443,'/cas/');
+	phpCAS::client(CAS_VERSION_2_0,'cas-auth.rpi.edu',443,'/cas/');
 	
 	// SSL!
-	phpCAS::setCasServerCACert("cas-auth.rpi.edu");
+	phpCAS::setCasServerCACert("../cas-auth.rpi.edu");
 
 	//Inserting a log into the log table
 	if(isset($_REQUEST['Task_ID']))
 	{
-		mysql_connect("localhost", "QuickLogs", "sera5jL6XVRsuXHG") or die("Could Not Connect To MYSQL");
-		mysql_select_db("QuickLogs") or die ("Could Not Connect to DATABASE");
+		QuickLogs::db_connect();
 	
 		if (phpCAS::isAuthenticated())
 		{
-			$result = mysql_query("INSERT INTO `QuickLogs`.`Logs` (`timestamp`, `type`, `userid`) VALUES (CURRENT_TIMESTAMP, " . $_REQUEST['Task_ID'] . ", (SELECT `ID` FROM `Users` WHERE `username`='" . phpCAS::getUser() . "' LIMIT 1))");
+			$result = mysql_query("INSERT INTO `QuickLogs`.`Logs` (`timestamp`, `type`, `userid`) VALUES ((SELECT UNIX_TIMESTAMP()), " . $_REQUEST['Task_ID'] . ", (SELECT `ID` FROM `Users` WHERE `username`='" . phpCAS::getUser() . "' LIMIT 1))");
 		}else{
-			$result = mysql_query("INSERT INTO `QuickLogs`.`Logs` (`timestamp`, `type`, `userid`) VALUES (CURRENT_TIMESTAMP, " . $_REQUEST['Task_ID'] . ", 0);");
+			$result = mysql_query("INSERT INTO `QuickLogs`.`Logs` (`timestamp`, `type`, `userid`) VALUES ((SELECT UNIX_TIMESTAMP()), " . $_REQUEST['Task_ID'] . ", 0);");
 		}
 		//The default user is user 0, this means user 0 HAS to be blank
 		if($result)
@@ -35,10 +38,9 @@
 	}
 	else
 	{
-		if (isset($_REQUEST['Box1']) AND isset($_REQUEST['Box2']) AND isset($_REQUEST['Box3']) AND isset($_REQUEST['Box4']) AND isset($_REQUEST['Box5']) AND isset($_REQUEST['Box6'])  AND isset($_REQUEST['Box7'])  AND isset($_REQUEST['Box8']))
+		if (isset($_REQUEST['Box1']) AND isset($_REQUEST['Box2']) AND isset($_REQUEST['Box3']) AND isset($_REQUEST['Box4']) AND isset($_REQUEST['Box5']) AND isset($_REQUEST['Box6']) AND isset($_REQUEST['Box7']) AND isset($_REQUEST['Box8']) AND isset($_REQUEST['Box9']) AND isset($_REQUEST['Box10']))
 		{
-			mysql_connect("localhost", "QuickLogs", "sera5jL6XVRsuXHG") or die("Could Not Connect To MYSQL");
-			mysql_select_db("QuickLogs") or die ("Could Not Connect to DATABASE");
+			QuickLogs::db_connect();
 			
 			if(isset($_REQUEST['Admin']) AND phpCAS::isAuthenticated())
 			{
@@ -48,7 +50,7 @@
 					$row = mysql_fetch_array($admin_check);
 					if ($row['type'] == "1")
 					{
-						$result = mysql_query("UPDATE `QuickLogs`.`display` SET `Box1`='" . $_REQUEST['Box1'] . "', `Box2`='" . $_REQUEST['Box2'] . "', `Box3`='" . $_REQUEST['Box3'] . "', `Box4`='" . $_REQUEST['Box4'] . "', `Box5`='" . $_REQUEST['Box5'] . "', `Box6`='" . $_REQUEST['Box6'] . "', `Box7`='" . $_REQUEST['Box7'] . "', `Box8`='" . $_REQUEST['Box8'] . "' WHERE `user`=0");
+						$result = mysql_query("UPDATE `QuickLogs`.`display` SET `Box1`='" . $_REQUEST['Box1'] . "', `Box2`='" . $_REQUEST['Box2'] . "', `Box3`='" . $_REQUEST['Box3'] . "', `Box4`='" . $_REQUEST['Box4'] . "', `Box5`='" . $_REQUEST['Box5'] . "', `Box6`='" . $_REQUEST['Box6'] . "', `Box7`='" . $_REQUEST['Box7'] . "', `Box8`='" . $_REQUEST['Box8'] . "', `Box9`='" . $_REQUEST['Box9'] . "', `Box10`='" . $_REQUEST['Box10'] . "' WHERE `user`=0");
 						
 						if ($_POST['Customize_On'])
 						{
@@ -70,7 +72,7 @@
 	
 			if (phpCAS::isAuthenticated() AND !isset($_REQUEST['Admin'])) // this should be true
 			{
-				$result = mysql_query("UPDATE `QuickLogs`.`display` SET `Box1`='" . $_REQUEST['Box1'] . "', `Box2`='" . $_REQUEST['Box2'] . "', `Box3`='" . $_REQUEST['Box3'] . "', `Box4`='" . $_REQUEST['Box4'] . "', `Box5`='" . $_REQUEST['Box5'] . "', `Box6`='" . $_REQUEST['Box6'] . "', `Box7`='" . $_REQUEST['Box7'] . "', `Box8`='" . $_REQUEST['Box8'] . "' WHERE `user`=(SELECT `ID` FROM `Users` WHERE `username`='" . phpCAS::getUser() . "' LIMIT 1)");
+				$result = mysql_query("UPDATE `QuickLogs`.`display` SET `Box1`='" . $_REQUEST['Box1'] . "', `Box2`='" . $_REQUEST['Box2'] . "', `Box3`='" . $_REQUEST['Box3'] . "', `Box4`='" . $_REQUEST['Box4'] . "', `Box5`='" . $_REQUEST['Box5'] . "', `Box6`='" . $_REQUEST['Box6'] . "', `Box7`='" . $_REQUEST['Box7'] . "', `Box8`='" . $_REQUEST['Box8'] . "', `Box9`='" . $_REQUEST['Box9'] . "', `Box10`='" . $_REQUEST['Box10'] . "' WHERE `user`=(SELECT `ID` FROM `Users` WHERE `username`='" . phpCAS::getUser() . "' LIMIT 1)");
 				if ($result)
 				{
 					header("location: ./index.php");
