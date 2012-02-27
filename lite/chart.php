@@ -123,9 +123,79 @@
 			$chart->render();
 			break;
 			
-		case "excel":
+		case "excel_6months":
 			header("Content-type: application/csv; ");
-			header("Content-Disposition: attachment; filename=\"Helpdesk_QuickLogs.csv\""); 
+			header("Content-Disposition: attachment; filename=\"Helpdesk_QuickLogs_6mth.csv\""); 
+			
+			echo "timestamp,problem,user\n";
+			
+			$users = array ();
+			$problems = array();
+			$new_result = mysql_query("SELECT `ID`,`username` FROM `Users`;");
+			if ($new_result)
+			{
+				while ($row = mysql_fetch_array($new_result))
+				{
+					$users[$row['ID']] = $row['username'];
+				}
+			}
+			$new_result = mysql_query("SELECT `index`,`problem` FROM `Types`;");
+			if ($new_result)
+			{
+				while ($row = mysql_fetch_array($new_result))
+				{
+					$problems[$row['index']] = $row['problem'];
+				}
+			}
+			$new_result = mysql_query("SELECT * FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - (6 * 30 * 24 * 60 * 60));");
+			if ($new_result)
+			{
+				while ($row = mysql_fetch_array($new_result))
+				{
+					echo $row['timestamp'] . "," . $problems[$row['type']] . "," . $users[$row['userid']] . "\n";
+				}
+			}
+
+			break;
+			
+		case "excel_12months":
+			header("Content-type: application/csv; ");
+			header("Content-Disposition: attachment; filename=\"Helpdesk_QuickLogs_12mth.csv\""); 
+			
+			echo "timestamp,problem,user\n";
+			
+			$users = array ();
+			$problems = array();
+			$new_result = mysql_query("SELECT `ID`,`username` FROM `Users`;");
+			if ($new_result)
+			{
+				while ($row = mysql_fetch_array($new_result))
+				{
+					$users[$row['ID']] = $row['username'];
+				}
+			}
+			$new_result = mysql_query("SELECT `index`,`problem` FROM `Types`;");
+			if ($new_result)
+			{
+				while ($row = mysql_fetch_array($new_result))
+				{
+					$problems[$row['index']] = $row['problem'];
+				}
+			}
+			$new_result = mysql_query("SELECT * FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - (12 * 30 * 24 * 60 * 60));");
+			if ($new_result)
+			{
+				while ($row = mysql_fetch_array($new_result))
+				{
+					echo $row['timestamp'] . "," . $problems[$row['type']] . "," . $users[$row['userid']] . "\n";
+				}
+			}
+
+			break;
+			
+		case "excel_all":
+			header("Content-type: application/csv; ");
+			header("Content-Disposition: attachment; filename=\"Helpdesk_QuickLogs_all.csv\""); 
 			
 			echo "timestamp,problem,user\n";
 			

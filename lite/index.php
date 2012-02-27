@@ -126,9 +126,12 @@
 		<!-- DIVS! -->
 		<div id="main">
 			<div id="title">
+				<div class="logo"></div>
 				<a href="./index.php"><div id="logo">QuickLogs</div></a>
 				<div id="result"></div>
 			</div>
+			<div class="red_bar"></div>
+		    <div class="gray_bar"></div>
 			<!-- Here are all my rows, and the 8 buttons -->
 			<div id="row">
 				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["1ID"]; ?>)'><text><p><?PHP echo $Button_Description[1]; ?></p></text></div></a>
@@ -166,7 +169,7 @@
 						if ($Customize || $admin) { echo "<p style='margin:0;'><a href='./settings.php' class='labels'>Settings</a></p>"; }
 					?>	
 				</div>
-				<div id="version">v3.1 <a href="https://github.com/daberkow/QuickLogs">Source</a></a></div> <!-- YAY -->
+				<div id="version">v3.2 <a href="https://github.com/daberkow/QuickLogs">Source</a></a></div> <!-- YAY -->
 				<div id="switch_ver">
 					<a href="http://j2ee7.server.rpi.edu:8080/helpdesk/stylesheets/welcome.faces" class="labels"> Send in a Ticket </a>
 					<p style="margin: 0;"><a href="./stats.php" class="labels">See Stats</a></p>

@@ -19,9 +19,12 @@
 	<body>
 		<div id="main">
 			<div id="title">
+				<div class="logo"></div>
 				<a href="./index.php"><div id="logo">QuickLogs</div></a>
 				<div id="result"></div>
 			</div>
+			<div class="red_bar"></div>
+		    <div class="gray_bar"></div>
 			<div id="short_chart" class="chart">
 				<img src="./chart.php?chart=short" alt="30 Day Type Chart"/> 
 			</div>
@@ -31,7 +34,11 @@
 			<div id="long_chart" class="chart">
 				<img src="./chart.php?chart=long" alt="History Chart"/> 
 			</div>
-			<a href="./chart.php?chart=excel">Download Excel File</a>
+			<p style='font-weight: bold;'><img src='./excel.png' alt='Download in Excel'/> Download Database in Excel</p>
+			 
+			<p><a href="./chart.php?chart=excel_6months">Download Excel File Containing 6 Months</a></p>
+			<p><a href="./chart.php?chart=excel_12months">Download Excel File Containing 1 Year</a></p>
+			<p><a href="./chart.php?chart=excel_all">Download Excel File Containing Entire Database</a></p>
 			<hr>
 			<div id="footer">
 				<div id="Stats">					
@@ -46,7 +53,7 @@
 					
 				?>	
 				</div>
-				<div id="version">v3.1 <a href="https://github.com/daberkow/QuickLogs">Source</a></a></div>
+				<div id="version">v3.2 <a href="https://github.com/daberkow/QuickLogs">Source</a></a></div>
 				<div id="switch_ver">
 					<a href="http://j2ee7.server.rpi.edu:8080/helpdesk/stylesheets/welcome.faces" class="labels"> Send in a Ticket </a>
 					<p style="margin: 0;"><a href="./stats.php" class="labels">See Stats</a></p>

@@ -1,3 +1,6 @@
+/* Dan Berkowitz, berkod2@rpi.edu, dansberkowitz@gmail.com, Feb 2012 */
+/* I dont like css */
+
 body {
 	width: 95%;
 	background-color: #dfdfdf;
@@ -5,7 +8,6 @@ body {
 
 #main {
 	margin: 15px;
-	padding: 15px;
 	border-style: solid;
 	border-width: 1px;
 	min-width: 475px;
@@ -37,6 +39,33 @@ body {
 	height: 90%;
 	width: 35%;
 	background-color: #ff566b;
+}
+
+div.logo
+{
+  background-repeat: no-repeat;
+  width: 45px;
+  height: 43px;
+  background-image:url("./rpi.jpg");
+  float: left;
+}
+
+div.red_bar
+{ 
+  height: 5px;
+  width: 100%;
+  margin-right: auto;
+  margin-left:auto;
+  background-color: rgb(247,0,31);
+}
+div.gray_bar
+{
+  height: 5px;
+  width: 100%;
+  position: relative;
+  margin-right: auto;
+  margin-left:auto;
+  background-color: rgb(60,60,60);
 }
 
 #row {
@@ -77,17 +106,17 @@ a.links {
 	font-style: normal;
 	font-weight: normal;
 	text-decoration: none;
-	
 }
+
 #logo {
 	text-decoration: none;
-	color: black;
+	color: #222;
 	margin-left: 12px;
-	font-style: italic;
-	font-family: cursive;
-	font-size: 28px;
+	font-family: "Arial";
+	font-size: 40px;
 	float: left;
 }
+
 #result {
 	margin-top: 20px;
 	margin-right: 12px;
@@ -104,6 +133,7 @@ hr {
 	width: 50%;
 	position: relative;
 }
+
 #selection_of_options1 {
 	width: 50%;
 	float: right;
@@ -116,7 +146,10 @@ hr {
 #footer {
 	width: 100%;
 	height: 5%;
-	}
+	padding-left: 10px;
+	padding-bottom: 10px;
+	padding-right: 10px;	
+}
 
 #Stats {
 	position: relative;
@@ -124,18 +157,22 @@ hr {
 	text-align: left;
 	float: left;
 }
+
 #version {
 	font-size: 12px;
 	position: relative;
 	width: 50px;
 	text-align: center;
 	float: left;
+	left: -2%;
 	margin-left: 30%;
 }
+
 #switch_ver {
 	position: relative;
 	width: 150px;
 	text-align: right;
+	left: -20px;
 	float: right;
 }
 
@@ -145,12 +182,14 @@ div#left select {
 	margin-top: 20%;
 	margin-bottom: 20%;
 }
+
 div#right select {
 	height: 30%;
 	width: 90%;
 	margin-top: 20%;
 	margin-bottom: 20%;
 }
+
 div.chart {
 	text-align: center;
 }
