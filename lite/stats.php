@@ -13,6 +13,7 @@
 <html>
 	<head>
 		<link rel="stylesheet" type="text/css" href="./style.css"/>
+		<link href="http://www.rpi.edu/favicon.ico" type="image/ico" rel="icon">
 		<!--<script src="../jquery-1.6.2.min.js"></script>-->
 
 	</head>
