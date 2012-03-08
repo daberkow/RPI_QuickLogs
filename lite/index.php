@@ -114,13 +114,33 @@
 						data: {Task_ID: passed_index},
 						success: function(data) {
 							$("#result").html(data);
+							bpf('#00FF00');
 						},
 						error: function(data) {
 							$("#result").html("ERROR");
+							bpf('#FF0000');
 						}
 					});
 					clock = (new Date().getTime());
 				}
+			}
+		</script>
+		
+		<script type="text/javascript">
+			<!-- change background color -->
+			function changeBGC(color)
+			{
+				document.getElementByid('main').style.backgroundColor = color;
+			}
+		</script>
+		
+		<script type="text/javascript">
+			<!-- button press feedback -->
+			function bpf(color)
+			{
+				var old_color = document.getElementById('main').style.backgroundColor;
+				changeBGC(color);
+				setTimeout(changeBGC, 400, old_color);
 			}
 		</script>
 	</head>
