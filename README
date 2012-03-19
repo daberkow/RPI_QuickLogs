@@ -1,5 +1,8 @@
-Version 3.1 adds a core file that has all the disconnect and reconnect stuff for mysql, this way I am not having to change login info in 4+ places
-Also you can add options under settings now
-The database moved fro ma bad date stamp to standard linux time stamp, so the lite folder has a script to migrate database, if for some reason this is being used, BACKUP DATABASE FIRST
-Charts fixed
-Version now has a source link
+Version 3.2.1
+-Added all pages pull version from core
+-Added effect when a option is selected, so that its easier to tell about pushed update
+-Removed Extra code
+-Removed CAS Docs
+-Removed SQL table upgrade and inserted a new table file
+--Building on new server, no default options could break it
+---System assumes display 0 is the default option

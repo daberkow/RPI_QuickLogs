@@ -13,6 +13,11 @@ class QuickLogs {
 		mysql_close();
 	}
 	
+	public function get_version()
+	{
+		return "3.2.1";
+	}
+	
 }
 
 ?>

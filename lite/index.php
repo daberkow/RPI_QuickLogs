@@ -114,33 +114,42 @@
 						data: {Task_ID: passed_index},
 						success: function(data) {
 							$("#result").html(data);
-							bpf('#00FF00');
+							alert_user();
 						},
 						error: function(data) {
 							$("#result").html("ERROR");
-							bpf('#FF0000');
+							$("#result").css("background", "red");
 						}
 					});
 					clock = (new Date().getTime());
 				}
 			}
-		</script>
-		
-		<script type="text/javascript">
-			<!-- change background color -->
-			function changeBGC(color)
+			
+			function alert_user()
 			{
-				document.getElementByid('main').style.backgroundColor = color;
+				var color = parseInt('00ff00', 16);
+				var new_color = "#" + color;
+				$("#result").css("background", new_color);
+				recurse_alert(color);
+				
 			}
-		</script>
-		
-		<script type="text/javascript">
-			<!-- button press feedback -->
-			function bpf(color)
-			{
-				var old_color = document.getElementById('main').style.backgroundColor;
-				changeBGC(color);
-				setTimeout(changeBGC, 400, old_color);
+			
+			function recurse_alert(old_colour)
+			{//old color is hex, the color is a int, new color is a string
+				var the_color = old_colour + parseInt("111111", 16);
+				var new_color = "#" + the_color.toString(16);
+				while (new_color.length < 7)
+				{
+					new_color = "#0" + new_color.substr(1, new_color.length - 1);
+				} 
+				//$("#result").append("<p>old: " + the_color + " New: " + new_color + " " + parseInt("111111", 16).toString() + " </p>");
+				$("#result").css("background", new_color);
+				if( the_color<=15658734)
+				{
+					setTimeout(	"recurse_alert(" + the_color + ")", 50 );
+				}else{
+					$("#result").css("background", "white");
+				}
 			}
 		</script>
 	</head>
@@ -191,7 +200,7 @@
 						if ($Customize || $admin) { echo "<p style='margin:0;'><a href='./settings.php' class='labels'>Settings</a></p>"; }
 					?>	
 				</div>
-				<div id="version">v3.2 <a href="https://github.com/daberkow/QuickLogs">Source</a></a></div> <!-- YAY -->
+				<div id="version">v<?PHP echo QuickLogs::get_version(); ?> <a href="https://github.com/daberkow/QuickLogs">Source</a></a></div> <!-- YAY -->
 				<div id="switch_ver">
 					<a href="http://j2ee7.server.rpi.edu:8080/helpdesk/stylesheets/welcome.faces" class="labels"> Send in a Ticket </a>
 					<p style="margin: 0;"><a href="./stats.php" class="labels">See Stats</a></p>
