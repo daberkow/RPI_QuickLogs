@@ -38,7 +38,7 @@
 			}
 		
 			//90 Days
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>'((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*90) . ")';");
+			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*90) . ");");
 			if ($new_result)
 			{
 				$row = mysql_fetch_array($new_result);
@@ -46,11 +46,18 @@
 			}
 			
 			//365 Days
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>'((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*365) . ")';");
+			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*365) . ");");
 			if ($new_result)
 			{
 				$row = mysql_fetch_array($new_result);
 				$dataSet->addPoint(new Point("365 Days", $row['RecordNumber']));
+			}
+			//All Days
+			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs`;");
+			if ($new_result)
+			{
+				$row = mysql_fetch_array($new_result);
+				$dataSet->addPoint(new Point("All History", $row['RecordNumber']));
 			}
 			$chart->setTitle("Helpdesk Tickets");
 			$chart->setDataSet($dataSet);
@@ -66,7 +73,7 @@
 			{
 				while ($row = mysql_fetch_array($new_result))
 				{
-					$result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `type`='" . $row['Type_ID'] . "';");
+					$result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `type`='" . $row['Type_ID'] . "' AND `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - 2592000);");
 					if ($result)
 					{
 						$rowz = mysql_fetch_array($result);
@@ -100,7 +107,7 @@
 			{
 				while ($row = mysql_fetch_array($new_result))
 				{
-					$result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `userid`='" . $row['User_ID'] . "';");
+					$result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `userid`='" . $row['User_ID'] . "' AND `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - 2592000);");
 					if ($result)
 					{
 						$rowz = mysql_fetch_array($result);
@@ -109,7 +116,7 @@
 						if ($name)
 						{
 							$rowy = mysql_fetch_array($name);
-							$dataSet->addPoint(new Point($rowy['username'], $rowz['RecordNumber']));
+							$dataSet->addPoint(new Point($rowy['username'] . " " . $rowz['RecordNumber'], $rowz['RecordNumber']));
 						}else{
 							$dataSet->addPoint(new Point($row['User_ID'], $rowz['RecordNumber']));
 						}
@@ -118,7 +125,7 @@
 				}
 			}
 						
-			$chart->setTitle("Last 30 Days By Users");
+			$chart->setTitle("Stats By Users for Last 30 Days");
 			$chart->setDataSet($dataSet);
 			$chart->render();
 			break;

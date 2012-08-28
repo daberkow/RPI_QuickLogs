@@ -1,8 +1,7 @@
-Version 3.2.1
--Added all pages pull version from core
--Added effect when a option is selected, so that its easier to tell about pushed update
--Removed Extra code
--Removed CAS Docs
--Removed SQL table upgrade and inserted a new table file
---Building on new server, no default options could break it
----System assumes display 0 is the default option
+Version 3.2.2
+-Charts Page: All time counter added
+-Charts Page: Listed wrong amount of cases for different dates
+-Charts Page: Top Users now is based on 30 days
+-Charts Page: Types of cases now only shows 30 days
+
+
