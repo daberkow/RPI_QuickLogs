@@ -102,7 +102,7 @@
 		<title class = "title">QuickLogs</title>
 		<link rel="stylesheet" type="text/css" href="./style.css"/>
 		<link href="http://www.rpi.edu/favicon.ico" type="image/ico" rel="icon">
-		<script src="../jquery-1.6.2.min.js"></script>
+		<script src="../jquery.js"></script>
 		<script>
 			var Changed_Items=new Array();
 			function submit_options(passed_index) {
@@ -302,7 +302,7 @@
 						?></select></div></a>
 				</div>
 				<div id="buttonz">
-						<input TYPE="submit" id="cmdSubmit" VALUE="Update Settings"/>
+					<input TYPE="submit" id="cmdSubmit" VALUE="Update Settings"/>
 				</div>
 			</form>
 			<?PHP

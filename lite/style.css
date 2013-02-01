@@ -90,7 +90,7 @@ div.gray_bar
 	position: relative;
 }
 
-text {
+#text {
 	text-align: center;
 	position: relative;
 	vertical-align: middle;
@@ -132,16 +132,6 @@ hr {
 	margin: 4px;
 }
 
-#selection_of_options0 {
-	width: 50%;
-	position: relative;
-}
-
-#selection_of_options1 {
-	width: 50%;
-	float: right;
-}
-
 #buttonz {
 	text-align: center;
 }
@@ -179,20 +169,20 @@ hr {
 	float: right;
 }
 
-div#left select {
+#left select {
 	height: 30%;
 	width: 90%;
 	margin-top: 20%;
 	margin-bottom: 20%;
 }
 
-div#right select {
+#right select {
 	height: 30%;
 	width: 90%;
 	margin-top: 20%;
 	margin-bottom: 20%;
 }
 
-div.chart {
+.chart {
 	text-align: center;
 }

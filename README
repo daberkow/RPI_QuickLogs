@@ -1,4 +1,11 @@
-Version 3.2.2
+Dan Berkowitz, https://github.com/daberkow/QuickLogs
+
+Version 3.2.3, 2/1/2013
+-Updated JQuery
+-Documentation
+-Optimizations
+
+Version 3.2.2, 8/22/2012
 -Charts Page: All time counter added
 -Charts Page: Listed wrong amount of cases for different dates
 -Charts Page: Top Users now is based on 30 days

@@ -99,7 +99,7 @@
 		<title class = "title">QuickLogs</title>
 		<link rel="stylesheet" type="text/css" href="./style.css"/>
 		<link href="http://www.rpi.edu/favicon.ico" type="image/ico" rel="icon">
-		<script src="../jquery-1.6.2.min.js"></script> <!--Only used for easy ajax requests-->
+		<script src="../jquery.js"></script> <!--Only used for easy ajax requests-->
 		<script>
 			// Easy Way to change and not need to change pages
 			//Clock and new clock were added cause touch screen kept double posting
@@ -165,24 +165,24 @@
 		    <div class="gray_bar"></div>
 			<!-- Here are all my rows, and the 8 buttons -->
 			<div id="row">
-				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["1ID"]; ?>)'><text><p><?PHP echo $Button_Description[1]; ?></p></text></div></a>
-				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["2ID"]; ?>)'><text><p><?PHP echo $Button_Description[2]; ?></p></text></div></a>
+				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["1ID"]; ?>)'><div id='text'><p><?PHP echo $Button_Description[1]; ?></p></div></div></a>
+				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["2ID"]; ?>)'><div id='text'><p><?PHP echo $Button_Description[2]; ?></p></div></div></a>
 			</div>
 			<div id="row">
-				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["3ID"]; ?>)'><text><p><?PHP echo $Button_Description[3]; ?></p></text></div></a>
-				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["4ID"]; ?>)'><text><p><?PHP echo $Button_Description[4]; ?></p></text></div></a>
+				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["3ID"]; ?>)'><div id='text'><p><?PHP echo $Button_Description[3]; ?></p></div></div></a>
+				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["4ID"]; ?>)'><div id='text'><p><?PHP echo $Button_Description[4]; ?></p></div></div></a>
 			</div>
 			<div id="row">
-				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["5ID"]; ?>)'><text><p><?PHP echo $Button_Description[5]; ?></p></text></div></a>
-				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["6ID"]; ?>)'><text><p><?PHP echo $Button_Description[6]; ?></p></text></div></a>
+				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["5ID"]; ?>)'><div id='text'><p><?PHP echo $Button_Description[5]; ?></p></div></div></a>
+				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["6ID"]; ?>)'><div id='text'><p><?PHP echo $Button_Description[6]; ?></p></div></div></a>
 			</div>
 			<div id="row">
-				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["7ID"]; ?>)'><text><p><?PHP echo $Button_Description[7]; ?></p></text></div></a>
-				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["8ID"]; ?>)'><text><p><?PHP echo $Button_Description[8]; ?></p></text></div></a>
+				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["7ID"]; ?>)'><div id='text'><p><?PHP echo $Button_Description[7]; ?></p></div></div></a>
+				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["8ID"]; ?>)'><div id='text'><p><?PHP echo $Button_Description[8]; ?></p></div></div></a>
 			</div>
 			<div id="row">
-				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["9ID"]; ?>)'><text><p><?PHP echo $Button_Description[9]; ?></p></text></div></a>
-				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["10ID"]; ?>)'><text><p><?PHP echo $Button_Description[10]; ?></p></text></div></a>
+				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["9ID"]; ?>)'><div id='text'><p><?PHP echo $Button_Description[9]; ?></p></div></div></a>
+				<a class="links" href="#"><div id="right" onclick='submit_options(<?PHP echo $Button_Description["10ID"]; ?>)'><div id='text'><p><?PHP echo $Button_Description[10]; ?></p></div></div></a>
 			</div>
 			<!-- NEW SECTION! -->
 			<hr>
