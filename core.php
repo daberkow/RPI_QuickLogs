@@ -15,7 +15,7 @@ class QuickLogs {
 	
 	public function get_version()
 	{
-		return "3.2.2";
+		return "3.2.3";
 	}
 	
 }
