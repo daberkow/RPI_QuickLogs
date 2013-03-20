@@ -13,10 +13,28 @@
 <html>
 	<head>
 		<title class = "title">QuickLogs</title>
+		<script src="../jquery.js"></script>
+		<script src="./chart.js"></script>
+		<script src="./static/highchart/js/highcharts.js"></script>
+		<link rel="stylesheet" type="text/css" media="all" href="./static/jsDatePick/jsDatePick_ltr.css" />
+		<script src="./static/jsDatePick/jsDatePick.jquery.min.1.3.js"></script>
 		<link rel="stylesheet" type="text/css" href="./style.css"/>
-		<link href="http://www.rpi.edu/favicon.ico" type="image/ico" rel="icon">
+		<link href="http://www.rpi.edu/favicon.ico" type="image/ico" rel="icon"/>
+		<script>
+			//replace the bad jschart date library
+			function loadME(){
+				new JsDatePick({
+					useMode:2,
+					target:"startField"	
+				});
+				new JsDatePick({
+					useMode:2,
+					target:"endField"	
+				});
+			}
+		</script>
 	</head>
-	<body>
+	<body onload='loadME(); makeChart()'>
 		<div id="main">
 			<div id="title">
 				<div class="logo"></div>
@@ -24,39 +42,15 @@
 				<div id="result"></div>
 			</div>
 			<div class="red_bar"></div>
-		    <div class="gray_bar"></div>
-			<div id="short_chart" class="chart">
-				<img src="./chart.php?chart=short" height='300' width='500' alt="30 Day Type Chart"/> 
+			<div class="gray_bar"></div>
+			<div style='display: inline;'><select id='jobType' onchange='makeChart()'><option value='Activity'>Activities</option><option value='1'>Log History</option><option value='2'>User Activity</option></select></div>
+			<div style='display: inline;'><input type="radio" name="group2" value="30" checked onchange='makeChart()'> 30 Days <input type="radio" name="group2" value="90" onchange='makeChart()'> 90 Days <input type="radio" name="group2" value="365" onchange='makeChart()'> 365 Days <input type="radio" name="group2" value="all" onchange='makeChart()'> All Time </div>
+			<div><input type="radio" name="group2" value="pick">Start Date:<input type='text' style='width:15%' id='startField'/>End Date:<input style='width:15%' type='text' id='endField'/></div>
+			<div id="container" style='width: 100%; height: 400px;'>
+				
 			</div>
-			<div id="user_chart" class="chart">
-				<img src="./chart.php?chart=users" height='300' width='500' alt="User Chart"/> 
-			</div>
-			<div id="long_chart" class="chart">
-				<img src="./chart.php?chart=long" height='300' width='500' alt="History Chart"/> 
-			</div>
-			<p style='font-weight: bold;'><img src='./excel.png' alt='Download in Excel' height='48' width='48' /> Download Database in Excel</p>
-			 
-			<p><a href="./chart.php?chart=excel_6months">Download Excel File Containing 6 Months</a></p>
-			<p><a href="./chart.php?chart=excel_12months">Download Excel File Containing 1 Year</a></p>
-			<p><a href="./chart.php?chart=excel_all">Download Excel File Containing Entire Database</a></p>
-			<hr>
 			<div id="footer">
-				<div id="Stats">					
-				<?PHP 
-					if (phpCAS::isAuthenticated())
-					{
-						echo "<a href='./logout.php' class='labels'>Logout " . phpCAS::getUser() . "</a>";
-					}else
-					{
-						echo "<a href='./login.php' class='labels'>Login</a>";
-					}
-				?>	
-				</div>
-				<div id="version">v<?PHP echo QuickLogs::get_version(); ?> <a href="https://github.com/daberkow/QuickLogs">Source</a></a></div>
-				<div id="switch_ver">
-					<a href="http://j2ee7.server.rpi.edu:8080/helpdesk/stylesheets/welcome.faces" class="labels"> Send in a Ticket </a>
-					<p style="margin: 0;"><a href="./stats.php" class="labels">See Stats</a></p>
-				</div>
+				<?PHP include("./footer.php"); ?>
 			</div>
 		</div>
 	</body>

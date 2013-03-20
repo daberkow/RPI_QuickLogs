@@ -8,7 +8,6 @@
 	switch ($_REQUEST['chart']) {
 		case "long":
 			header("Content-type: image/png");
-		
 			$chart = new VerticalBarChart(500,300);
 			
 			$dataSet = new XYDataSet();
@@ -232,7 +231,45 @@
 					echo $row['timestamp'] . "," . $problems[$row['type']] . "," . $users[$row['userid']] . "\n";
 				}
 			}
-
+			break;
+		case "json_activity":
+			$returning_Data = array();
+			if (isset($_REQUEST['startTime']) && isset($_REQUEST['endTime']))
+			{
+				$new_result = mysql_query("SELECT DISTINCT `type` AS Type_ID FROM `Logs` WHERE `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");");
+				//echo "SELECT DISTINCT `type` AS Type_ID FROM `Logs` WHERE `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");";
+				if ($new_result)
+				{
+					while ($row = mysql_fetch_array($new_result))
+					{
+						$result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `type`='" . $row['Type_ID'] . "' AND `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");");
+						if ($result)
+						{
+							$rowz = mysql_fetch_array($result);	
+							$name = mysql_query("SELECT `problem` FROM `Types` WHERE `index`='" . $row['Type_ID'] . "';");
+							if ($name)
+							{
+								$rowy = mysql_fetch_array($name);
+								$tempArray = array();
+								array_push($tempArray, $rowy['problem']);
+								array_push($tempArray, intval($rowz['RecordNumber']));
+								array_push($returning_Data, $tempArray);
+							}else{
+								$tempArray = array();
+								array_push($tempArray, $row['Type_ID']);
+								array_push($tempArray, intval($rowz['RecordNumber']));
+								array_push($returning_Data, $tempArray);
+							}	
+						}		
+					}
+					echo json_encode($returning_Data);
+				}else{
+					echo "Error with request";
+				}
+				
+			}else{
+				echo "Error with request";
+			}
 			break;
 			
 	}

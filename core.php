@@ -13,9 +13,9 @@ class QuickLogs {
 		mysql_close();
 	}
 	
-	public function get_version()
+	public static function get_version()
 	{
-		return "3.2.3";
+		return "3.3.0";
 	}
 	
 }

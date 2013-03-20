@@ -108,7 +108,7 @@
 				var new_clock = ((new Date().getTime()));
 				if ((clock+500)<=new_clock)
 				{
-				$.ajax({
+					$.ajax({
 						type: 'POST',
 						url: "./submit.php",
 						data: {Task_ID: passed_index},
