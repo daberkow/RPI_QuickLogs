@@ -1,7 +1,7 @@
-function makeChart() {
+/*function makeChart() {
     /*
      *type is 30,90,365,all,or pick, only on pick does passedStartDate and passedEndDate get used
-     */
+     
     switch ($('#jobType').val()) {
         case "activity":
             $('input[name=group2]').removeAttr('disabled');
@@ -123,14 +123,119 @@ function makeChart() {
             });
             break;
     }
+}*/
+    
+function makeChart() {
+    $('input[name=group2]').removeAttr('disabled');
+    var aStartTime = 0;
+    var aEndTime = 0;
+    var atitle = "";
+    switch ($('input[name=group2]:checked').val()) {
+        case '30':
+            CurrentDate = new Date();
+            aEndTime = CurrentDate.getTime() / 1000;
+            aStartTime = aEndTime - (60*60*24*30);
+            atitle = "30 Days of Activity";
+            break;
+        case '90':
+            CurrentDate = new Date();
+            aEndTime = CurrentDate.getTime() / 1000;
+            aStartTime = aEndTime - (60*60*24*90);
+            atitle = "90 Days of Activity";
+            break;
+        case '365':
+            CurrentDate = new Date();
+            aEndTime = CurrentDate.getTime() / 1000;
+            aStartTime = aEndTime - (60*60*24*365);
+            atitle = "365 Days of Activity";
+            break;
+        case 'all':
+            CurrentDate = new Date();
+            aEndTime = CurrentDate.getTime() / 1000;
+            aStartTime = 0;
+            atitle = "All Days of Activity";
+            break;
+        case "pick"://here
+            break;
+    }
+    $.ajax({
+        type: 'POST',
+        url: "./chart.php",
+        data: {chart: 'json_activity', startTime: aStartTime, endTime: aEndTime},
+        success: function(data) {
+            //console.log(data);
+            var jsonData = JSON.parse(data);
+            pie(jsonData, atitle, "Activity", "container");
+        },
+        error: function(data) {
+            
+        }
+    });
+    //code
+    var StartTime = 0;
+    var EndTime = 0;
+    var title = "";
+    switch ($('input[name=group2]:checked').val()) {
+        case '30':
+            CurrentDate = new Date();
+            EndTime = CurrentDate.getTime() / 1000;
+            StartTime = EndTime - (60*60*24*30);
+            title = "30 Days By User";
+            break;
+        case '90':
+            CurrentDate = new Date();
+            EndTime = CurrentDate.getTime() / 1000;
+            StartTime = EndTime - (60*60*24*90);
+            title = "90 Days By User";
+            break;
+        case '365':
+            CurrentDate = new Date();
+            EndTime = CurrentDate.getTime() / 1000;
+            StartTime = EndTime - (60*60*24*365);
+            title = "365 Days By User";
+            break;
+        case 'all':
+            CurrentDate = new Date();
+            EndTime = CurrentDate.getTime() / 1000;
+            StartTime = 0;
+            title = "All Days By User";
+            break;
+        case "pick"://here
+            break;
+    }
+    $.ajax({
+            type: 'POST',
+            url: "./chart.php",
+            data: {chart: 'json_user', startTime: StartTime, endTime: EndTime},
+            success: function(data) {
+                //console.log(data);
+                var jsonData = JSON.parse(data);
+                pie(jsonData, title, "User Activity", "container2");
+            },
+        });
+     $.ajax({
+            type: 'POST',
+            url: "./chart.php",
+            data: {chart: 'json_total'},
+            success: function(data) {
+                //console.log(data);
+                var jsonData = JSON.parse(data);
+                bar(jsonData, "Log Histroy", "container3");
+            },
+            error: function(data) {
+                
+            }
+        });
 }
 
-function pie(passedData, passedTitle, passedDescripter) {
+function pie(passedData, passedTitle, passedDescripter, div) {
+    passedData.sort(function(a,b){ if(a[1] < b[1]) return 1; if (a[1] == b[1]) return 0; return -1;});
+    
     var chart;
     
     chart = new Highcharts.Chart({
         chart: {
-            renderTo: 'container',
+            renderTo: div,
             plotBackgroundColor: null,
             plotBorderWidth: null,
             plotShadow: false
@@ -164,12 +269,12 @@ function pie(passedData, passedTitle, passedDescripter) {
     });
 }
 
-function bar(passedData, passedTitle) {
+function bar(passedData, passedTitle, div) {
     var chart;
     
     chart = new Highcharts.Chart({
         chart: {
-            renderTo: 'container',
+            renderTo: div,
             type: 'column',
             margin: [ 50, 50, 100, 80]
         },
@@ -224,8 +329,9 @@ function bar(passedData, passedTitle) {
     });
 }
 
-function line(passedData, passedTitle, passedDescription) {
-    $('#container').highcharts({
+function line(passedData, passedTitle, passedDescription, div) {
+    
+    $('#' + div).highcharts({
             chart: {
                 type: 'line',
                 marginRight: 130,
