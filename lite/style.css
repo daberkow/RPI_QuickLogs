@@ -18,6 +18,10 @@ body {
 	background-color: white;
 	margin-left: auto;
 	margin-right: auto;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10px;
+	
 }
 
 #left {
@@ -29,7 +33,13 @@ body {
 	position: relative;
 	height: 90%;
 	width: 35%;
-	background-color: #8fc5ff;
+	background-color: #B9DBFF;
+	-moz-box-shadow: 3px 3px 4px #AAAAAA;
+	-webkit-box-shadow: 3px 3px 4px #AAAAAA;
+	box-shadow: 3px 3px 4px #AAAAAA;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
 }
 
 #right {
@@ -41,7 +51,13 @@ body {
 	position: relative;
 	height: 90%;
 	width: 35%;
-	background-color: #ff566b;
+	background-color: #FF95A2;
+	-moz-box-shadow: 3px 3px 4px #AAAAAA;
+	-webkit-box-shadow: 3px 3px 4px #AAAAAA;
+	box-shadow: 3px 3px 4px #AAAAAA;
+	-webkit-border-radius: 15px;
+	-moz-border-radius: 15px;
+	border-radius: 15px;
 }
 
 div.logo
@@ -51,6 +67,7 @@ div.logo
   height: 43px;
   background-image:url("./rpi.jpg");
   float: left;
+  margin-left: 20px;
 }
 
 div.red_bar
@@ -69,6 +86,7 @@ div.gray_bar
   margin-right: auto;
   margin-left:auto;
   background-color: rgb(60,60,60);
+  margin-bottom: 15px;
 }
 
 #row {
@@ -94,7 +112,6 @@ div.gray_bar
 	text-align: center;
 	position: relative;
 	vertical-align: middle;
-	
 }
 
 a.labels {

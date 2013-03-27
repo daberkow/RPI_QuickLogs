@@ -47,15 +47,6 @@
 	}
 	
 	include '../core.php';
-	
-	QuickLogs::db_connect();
-
-	include_once '../cas/CAS.php';
-	
-	phpCAS::client(CAS_VERSION_2_0,'cas-auth.rpi.edu',443,'/cas/');
-	
-	// SSL!
-	phpCAS::setCasServerCACert("../cas-auth.rpi.edu");
 		
 	//Assume that they arent a admin, then if they have authenicated take a look
 	$admin=false;
@@ -162,7 +153,7 @@
 				<div id="result"></div>
 			</div>
 			<div class="red_bar"></div>
-		    <div class="gray_bar"></div>
+			<div class="gray_bar"></div>
 			<!-- Here are all my rows, and the 8 buttons -->
 			<div id="row">
 				<a class="links" href="#"><div id="left" onclick='submit_options(<?PHP echo $Button_Description["1ID"]; ?>)'><div id='text'><p><?PHP echo $Button_Description[1]; ?></p></div></div></a>

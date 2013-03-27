@@ -2,13 +2,7 @@
 	// Dan Berkowitz, berkod2@rpi.edu, dansberkowitz@gmail.com, Feb 2012
 	//Submit handles when jobs are sent in as done, and options changing
 
-	include_once '../cas/CAS.php';
 	include '../core.php';
-	
-	phpCAS::client(CAS_VERSION_2_0,'cas-auth.rpi.edu',443,'/cas/');
-	
-	// SSL!
-	phpCAS::setCasServerCACert("../cas-auth.rpi.edu");
 
 	//Inserting a log into the log table
 	if(isset($_REQUEST['Task_ID']))

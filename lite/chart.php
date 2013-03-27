@@ -1,134 +1,12 @@
 <?php
 	// Dan Berkowitz, berkod2@rpi.edu, dansberkowitz@gmail.com, Feb 2012
-	include "../libchart/classes/libchart.php";
 	include '../core.php';
-	
-	QuickLogs::db_connect();
-	
+	if (!isset($_REQUEST['chart']))
+	{
+		echo "Invalid Post";
+		return;
+	}
 	switch ($_REQUEST['chart']) {
-		case "long":
-			header("Content-type: image/png");
-			$chart = new VerticalBarChart(500,300);
-			
-			$dataSet = new XYDataSet();
-			
-			//24 hours
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . 86400 . ")");
-			if ($new_result)
-			{
-				$row = mysql_fetch_array($new_result);
-				$dataSet->addPoint(new Point("24 Hours", $row['RecordNumber']));
-			}
-			
-			//A week
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*7) . ")");
-			if ($new_result)
-			{
-				$row = mysql_fetch_array($new_result);
-				$dataSet->addPoint(new Point("7 Days", $row['RecordNumber']));
-			}
-			
-			//A month
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*30) . ")");
-			if ($new_result)
-			{
-				$row = mysql_fetch_array($new_result);
-				$dataSet->addPoint(new Point("30 Days", $row['RecordNumber']));
-			}
-		
-			//90 Days
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*90) . ");");
-			if ($new_result)
-			{
-				$row = mysql_fetch_array($new_result);
-				$dataSet->addPoint(new Point("90 Days", $row['RecordNumber']));
-			}
-			
-			//365 Days
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*365) . ");");
-			if ($new_result)
-			{
-				$row = mysql_fetch_array($new_result);
-				$dataSet->addPoint(new Point("365 Days", $row['RecordNumber']));
-			}
-			//All Days
-			$new_result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs`;");
-			if ($new_result)
-			{
-				$row = mysql_fetch_array($new_result);
-				$dataSet->addPoint(new Point("All History", $row['RecordNumber']));
-			}
-			$chart->setTitle("Helpdesk Tickets");
-			$chart->setDataSet($dataSet);
-			$chart->render();
-			break;
-			
-		case "short":
-			header("Content-type: image/png");
-			$chart = new PieChart(500, 300);
-			$dataSet = new XYDataSet();
-			$new_result = mysql_query("SELECT DISTINCT `type` AS Type_ID FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - 2592000);");
-			if ($new_result)
-			{
-				while ($row = mysql_fetch_array($new_result))
-				{
-					$result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `type`='" . $row['Type_ID'] . "' AND `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - 2592000);");
-					if ($result)
-					{
-						$rowz = mysql_fetch_array($result);
-							
-						$name = mysql_query("SELECT `problem` FROM `Types` WHERE `index`='" . $row['Type_ID'] . "';");
-						if ($name)
-						{
-							$rowy = mysql_fetch_array($name);
-							$dataSet->addPoint(new Point($rowy['problem'], $rowz['RecordNumber']));
-						}else{
-							$dataSet->addPoint(new Point($row['Type_ID'], $rowz['RecordNumber']));
-						}
-						
-					}
-					
-				}
-			}
-			$chart->setTitle("Last 30 Days By Type");
-				
-			$chart->setDataSet($dataSet);
-			$chart->render();
-			break;
-			
-		case "users":
-			header("Content-type: image/png");
-			$chart = new PieChart(500, 300);
-			$dataSet = new XYDataSet();
-			
-			$new_result = mysql_query("SELECT DISTINCT `userid` AS User_ID FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - 2592000);");
-			if ($new_result)
-			{
-				while ($row = mysql_fetch_array($new_result))
-				{
-					$result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `userid`='" . $row['User_ID'] . "' AND `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - 2592000);");
-					if ($result)
-					{
-						$rowz = mysql_fetch_array($result);
-						
-						$name = mysql_query("SELECT `username` FROM `Users` WHERE `ID`='" . $row['User_ID'] . "';");
-						if ($name)
-						{
-							$rowy = mysql_fetch_array($name);
-							$dataSet->addPoint(new Point($rowy['username'] . " " . $rowz['RecordNumber'], $rowz['RecordNumber']));
-						}else{
-							$dataSet->addPoint(new Point($row['User_ID'], $rowz['RecordNumber']));
-						}
-					}
-					
-				}
-			}
-						
-			$chart->setTitle("Stats By Users for Last 30 Days");
-			$chart->setDataSet($dataSet);
-			$chart->render();
-			break;
-			
 		case "excel_6months":
 			header("Content-type: application/csv; ");
 			header("Content-Disposition: attachment; filename=\"Helpdesk_QuickLogs_6mth.csv\""); 
@@ -246,14 +124,16 @@
 						if ($result)
 						{
 							$rowz = mysql_fetch_array($result);	
-							$name = mysql_query("SELECT `problem` FROM `Types` WHERE `index`='" . $row['Type_ID'] . "';");
+							$name = mysql_query("SELECT `problem` FROM `Types` WHERE `index`='" . $row['Type_ID'] . "'");
 							if ($name)
 							{
 								$rowy = mysql_fetch_array($name);
 								$tempArray = array();
 								array_push($tempArray, $rowy['problem']);
+								
 								array_push($tempArray, intval($rowz['RecordNumber']));
 								array_push($returning_Data, $tempArray);
+								
 							}else{
 								$tempArray = array();
 								array_push($tempArray, $row['Type_ID']);
@@ -271,7 +151,102 @@
 				echo "Error with request";
 			}
 			break;
+		case "json_total":
+			$Returning_array = array();
+			$labels_element = array();
+			$data_element = array();
+			$result = database_helper::db_return_array("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . 86400 . ");");
+			array_push($labels_element, "24 Hours");
+			array_push($data_element, intval($result[0][0]));
 			
+			$result = database_helper::db_return_array("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*7) . ");");
+			array_push($labels_element, "7 Days");
+			array_push($data_element, intval($result[0][0]));
+			
+			$result = database_helper::db_return_array("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*30) . ");");
+			array_push($labels_element, "30 Days");
+			array_push($data_element, intval($result[0][0]));
+			
+			$result = database_helper::db_return_array("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*90) . ");");
+			array_push($labels_element, "90 Days");
+			array_push($data_element, intval($result[0][0]));
+			
+			$result = database_helper::db_return_array("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - " . (86400*365) . ");");
+			array_push($labels_element, "365 Days");
+			array_push($data_element, intval($result[0][0]));
+			
+			$result = database_helper::db_return_array("SELECT COUNT(*) AS RecordNumber FROM `Logs`;");
+			array_push($labels_element, "All Time");
+			array_push($data_element, intval($result[0][0]));
+			
+			array_push($Returning_array, $labels_element);
+			array_push($Returning_array, $data_element);
+			
+			echo json_encode($Returning_array);
+			break;
+		case "json_user":
+			if (isset($_REQUEST['startTime']) && isset($_REQUEST['endTime']))
+			{
+				$returned_result = array();
+				$new_result = mysql_query("SELECT DISTINCT `userid` AS User_ID FROM `Logs` WHERE `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");");
+				if ($new_result)
+				{
+					while ($row = mysql_fetch_array($new_result))
+					{
+						$result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `userid`='" . $row['User_ID'] . "' AND `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");");
+						if ($result)
+						{
+							$rowz = mysql_fetch_array($result);
+							$name = mysql_query("SELECT `username` FROM `Users` WHERE `ID`='" . $row['User_ID'] . "';");
+							if ($name)
+							{
+								$rowy = mysql_fetch_array($name);
+								$thisRow = array();
+								array_push($thisRow, $rowy['username']);
+								array_push($thisRow, intval($rowz['RecordNumber']));
+								array_push($returned_result, $thisRow);
+							}else{
+								$thisRow = array();
+								array_push($thisRow, $row['User_ID']);
+								array_push($thisRow, intval($rowz['RecordNumber']));
+								array_push($returned_result, $thisRow);
+							}
+						}
+					}
+					echo json_encode($returned_result);
+				}else{
+					echo "Error in lookup";
+				}
+			}else{
+				echo "Invalid Request";
+			}
+			break;
+		case "json_trend":
+			$hashArray = array();
+			$start = time() - (60*60*24*7);
+			$end = time();
+			$returned_result = array();
+			$new_result = database_helper::db_return_array("SELECT * FROM  `Types`");
+			foreach($new_result as $row)
+			{
+				$hashArray[$row['index']] = $row['problem'];
+			}
+			for ($i = 0; $i < 4; $i++)
+			{
+				$thisweek = array();
+				$new_result = database_helper::db_return_array("SELECT DISTINCT `type` AS Type_ID FROM `Logs` WHERE `timestamp`>(" . $start . ") AND `timestamp`<(" . $end . ");");
+				
+				foreach($new_result as $thisItem)//0 is type
+				{
+					$result = database_helper::db_return_array("SELECT COUNT(`timestamp`) FROM `Logs` WHERE `type`='" . $thisItem[0] . "' AND `timestamp`>(" . $start . ") AND `timestamp`<(" . $end . ");");
+					//confused here, stopped here
+				}
+				echo ",";
+				$start = $start - (60*60*24*7);
+				$end = $end - (60*60*24*7);
+			}
+				
+			break;
 	}
 
 	QuickLogs::db_disconnect();

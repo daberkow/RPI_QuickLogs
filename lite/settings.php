@@ -47,15 +47,6 @@
 		}
 	}
 	
-	include_once '../cas/CAS.php';
-	
-	phpCAS::client(CAS_VERSION_2_0,'cas-auth.rpi.edu',443,'/cas/');
-	
-	// SSL!
-	phpCAS::setCasServerCACert("../cas-auth.rpi.edu");
-	
-	QuickLogs::db_connect();
-	
 	//Assume that they arent a admin, then if they have authenicated take a look
 	$admin=false;
 	if (phpCAS::isAuthenticated())
