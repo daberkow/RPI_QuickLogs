@@ -1,12 +1,6 @@
 <?PHP
 	// Dan Berkowitz, berkod2@rpi.edu, dansberkowitz@gmail.com, Feb 2012
-
-	include_once '../cas/CAS.php';
-	
-	phpCAS::client(CAS_VERSION_2_0,'cas-auth.rpi.edu',443,'/cas/');
-	
-	// SSL!
-	phpCAS::setCasServerCACert("../cas-auth.rpi.edu");
+	include '../core.php';
 		
 	//If not authenticated then do it
 	if (!(phpCAS::isAuthenticated()))
@@ -14,8 +8,6 @@
 		phpCAS::forceAuthentication();
 	}else{
 		//We are authenticated, but we may not be in the users database		
-			include '../core.php';
-	
 		QuickLogs::db_connect();
 		
 		$user_exists = mysql_query("SELECT * FROM `Users` WHERE `username`='" . phpCAS::getUser() ."'");
