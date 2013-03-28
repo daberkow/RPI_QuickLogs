@@ -167,9 +167,6 @@ function makeChart() {
             var jsonData = JSON.parse(data);
             pie(jsonData, atitle, "Activity", "container");
         },
-        error: function(data) {
-            
-        }
     });
     //code
     var StartTime = 0;
@@ -226,6 +223,67 @@ function makeChart() {
                 
             }
         });
+     
+    makeWeekTime();
+}
+
+function makeWeekTime() {//stopped here, zm keeps changing
+    searches = 0;
+    weekholder = new Array();
+    for (zm = 0; zm < 4; zm++) {
+        var dater = new Date();
+        var aEndTime = ((dater.getTime()) / 1000) - (60*60*24*7*zm);
+        var aStartTime = aEndTime - (60*60*24*7);
+        //console.log(aStartTime + ' ' +  aEndTime);
+        $.ajax({
+            type: 'POST',
+            url: "./chart.php",
+            data: {chart: 'json_activity', startTime: aStartTime, endTime: aEndTime},
+            success: function(data) {
+                console.log(data + ' ' + zm);
+                weekholder[zm] = JSON.parse(data);
+                searches++;
+                if (searches == 4) {
+                    generateWeekTime();
+                }
+            },
+        }); 
+    }
+        
+}
+
+function generateWeekTime() {
+    console.log(normalizer(weekholder));
+}
+
+function normalizer(passedData) {
+    //class[week][catergory] = number of events
+    var Events = new Array();
+    for (var z = 0; z < passedData.length; z++) {
+        for (var x in passedData[z]) {
+            if (typeof(Events[x]) == "undefined") {
+                Events[x] = null;
+            }
+        }
+    }
+    var ReturningArray = new Array();
+    //returningarray[0-...]['name','data']
+    for (var z = 0; z < passedData.length; z++) {
+        for (var x in Events) {
+            if (typeof(passedData[z][x]) == "undefined") {
+                ReturningArray[x].push(0);
+            }else{
+                ReturningArray[x].push(passedData[z][x]);
+            }
+        }
+    }
+    var FinalArray = new Array();
+    for (var x in ReturningArray) {
+        tempArray = new Array();
+        tempArray['name'] = x;
+        tempArray['data'] = ReturningArray[x];
+    }
+    return FinalArray;
 }
 
 function pie(passedData, passedTitle, passedDescripter, div) {
