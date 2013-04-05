@@ -1,7 +1,7 @@
 <?PHP
 include_once '../cas/CAS.php';
 phpCAS::client(CAS_VERSION_2_0,'cas-auth.rpi.edu',443,'/cas/');
-phpCAS::setCasServerCACert("../cas/CACert.pem");
+phpCAS::setCasServerCACert("../CACert.pem");
 
 class QuickLogs {
 

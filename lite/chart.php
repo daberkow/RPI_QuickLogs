@@ -118,6 +118,10 @@
 				//echo "SELECT DISTINCT `type` AS Type_ID FROM `Logs` WHERE `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");";
 				if ($new_result)
 				{
+					if (isset($_REQUEST['id']))
+					{
+						array_push($returning_Data, $_REQUEST['id']);
+					}
 					while ($row = mysql_fetch_array($new_result))
 					{
 						$result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `type`='" . $row['Type_ID'] . "' AND `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");");

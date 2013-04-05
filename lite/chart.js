@@ -223,65 +223,107 @@ function makeChart() {
                 
             }
         });
-     
-    makeWeekTime();
+    makeWeekTime(5, 7, "container4");
+    makeDayTime(7, 1, "container5");
 }
 
-function makeWeekTime() {//stopped here, zm keeps changing
+function makeWeekTime(passedUnits, passedDaysPer, passedDiv) {//stopped here, zm keeps changing
     searches = 0;
     weekholder = new Array();
-    for (zm = 0; zm < 4; zm++) {
+    for (zm = 0; zm < passedUnits; zm++) {
         var dater = new Date();
-        var aEndTime = ((dater.getTime()) / 1000) - (60*60*24*7*zm);
-        var aStartTime = aEndTime - (60*60*24*7);
+        var aEndTime = ((dater.getTime()) / 1000) - (60*60*24*passedDaysPer*zm);
+        var aStartTime = aEndTime - (60*60*24*passedDaysPer);
         //console.log(aStartTime + ' ' +  aEndTime);
         $.ajax({
             type: 'POST',
             url: "./chart.php",
-            data: {chart: 'json_activity', startTime: aStartTime, endTime: aEndTime},
+            data: {chart: 'json_activity', startTime: aStartTime, endTime: aEndTime, id: zm},
             success: function(data) {
-                console.log(data + ' ' + zm);
-                weekholder[zm] = JSON.parse(data);
+                //console.log(data);
+                jsonData = JSON.parse(data);
+                var tempID = jsonData[0];
+                jsonData.splice(0,1);
+                weekholder[tempID] = jsonData;
                 searches++;
                 if (searches == 4) {
-                    generateWeekTime();
+                    generateWeekTime(passedDiv);   
                 }
             },
         }); 
     }
-        
 }
 
-function generateWeekTime() {
-    console.log(normalizer(weekholder));
+function makeDayTime(passedUnits, passedDaysPer, passedDiv) {//stopped here, zm keeps changing
+    daysearches = 0;
+    dayholder = new Array();
+    for (zm = 0; zm < passedUnits; zm++) {
+        var dater = new Date();
+        var aEndTime = ((dater.getTime()) / 1000) - (60*60*24*passedDaysPer*zm);
+        var aStartTime = aEndTime - (60*60*24*passedDaysPer);
+        //console.log(aStartTime + ' ' +  aEndTime);
+        $.ajax({
+            type: 'POST',
+            url: "./chart.php",
+            data: {chart: 'json_activity', startTime: aStartTime, endTime: aEndTime, id: zm},
+            success: function(data) {
+                //console.log(data);
+                jsonData = JSON.parse(data);
+                var tempID = jsonData[0];
+                jsonData.splice(0,1);
+                dayholder[tempID] = jsonData;
+                daysearches++;
+                if (daysearches == passedUnits) {
+                    generateDayTime(passedDiv);
+                }
+            },
+        }); 
+    }
+}
+
+function generateWeekTime(passedDiv) {
+    var convertedData = normalizer(weekholder);
+    //console.log(convertedData);
+    line(convertedData,"Activity Per Week Change", "Type of activity", passedDiv, ["This Week", "-1 Week", "-2 Weeks", "-3 Weeks", "-4 Weeks"]);
+}
+
+function generateDayTime(passedDiv) {
+    var convertedData = normalizer(dayholder);
+    //console.log(convertedData);
+    line(convertedData,"Activity Per Day Change", "Type of activity", passedDiv, ["Today", "-1 Day", "-2 Days", "-3 Days", "-4 Days", "-5 Days", "-6 Days"]);
 }
 
 function normalizer(passedData) {
+    //console.log(passedData);
     //class[week][catergory] = number of events
     var Events = new Array();
     for (var z = 0; z < passedData.length; z++) {
         for (var x in passedData[z]) {
-            if (typeof(Events[x]) == "undefined") {
-                Events[x] = null;
+            if (typeof(Events[passedData[z][x][0]]) == "undefined") {
+                Events[passedData[z][x][0]] = new Array();
             }
         }
     }
+    
     var ReturningArray = new Array();
     //returningarray[0-...]['name','data']
     for (var z = 0; z < passedData.length; z++) {
+        for (var x in passedData[z]) {
+            Events[passedData[z][x][0]].push(passedData[z][x][1]);
+        }
         for (var x in Events) {
-            if (typeof(passedData[z][x]) == "undefined") {
-                ReturningArray[x].push(0);
-            }else{
-                ReturningArray[x].push(passedData[z][x]);
+            if (typeof(Events[x][z]) == "undefined") {
+                Events[x][z] = 0;
             }
         }
     }
-    var FinalArray = new Array();
-    for (var x in ReturningArray) {
+    //console.log(Events);
+    FinalArray = new Array();
+    for (var x in Events) {
         tempArray = new Array();
         tempArray['name'] = x;
-        tempArray['data'] = ReturningArray[x];
+        tempArray['data'] = Events[x];
+        FinalArray.push(tempArray);
     }
     return FinalArray;
 }
@@ -337,7 +379,7 @@ function bar(passedData, passedTitle, div) {
             margin: [ 50, 50, 100, 80]
         },
         title: {
-            text: 'Log History'
+            text: passedTitle
         },
         xAxis: {
             categories: passedData[0],
@@ -387,21 +429,22 @@ function bar(passedData, passedTitle, div) {
     });
 }
 
-function line(passedData, passedTitle, passedDescription, div) {
+function line(passedData, passedTitle, passedDescription, div, passedXAxis) {
+    var charts;
     
-    $('#' + div).highcharts({
+    charts = new Highcharts.Chart({
             chart: {
                 type: 'line',
                 marginRight: 130,
-                marginBottom: 25
+                marginBottom: 25,
+                renderTo: div
             },
             title: {
-                text: 'Trends of Tickets',
+                text: passedTitle,
                 x: -20 //center
             },
             xAxis: {
-                categories: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-                    'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec']
+                categories: passedXAxis
             },
             yAxis: {
                 title: {
@@ -412,6 +455,11 @@ function line(passedData, passedTitle, passedDescription, div) {
                     width: 1,
                     color: '#808080'
                 }]
+            },
+            plotOptions: {
+                series: {
+                    threshold: 0
+                }
             },
             tooltip: {
                 valueSuffix: '°C'
@@ -424,18 +472,6 @@ function line(passedData, passedTitle, passedDescription, div) {
                 y: 100,
                 borderWidth: 0
             },
-            series: [{
-                name: 'Tokyo',
-                data: [7.0, 6.9, 9.5, 14.5, 18.2, 21.5, 25.2, 26.5, 23.3, 18.3, 13.9, 9.6]
-            }, {
-                name: 'New York',
-                data: [-0.2, 0.8, 5.7, 11.3, 17.0, 22.0, 24.8, 24.1, 20.1, 14.1, 8.6, 2.5]
-            }, {
-                name: 'Berlin',
-                data: [-0.9, 0.6, 3.5, 8.4, 13.5, 17.0, 18.6, 17.9, 14.3, 9.0, 3.9, 1.0]
-            }, {
-                name: 'London',
-                data: [3.9, 4.2, 5.7, 8.5, 11.9, 15.2, 17.0, 16.6, 14.2, 10.3, 6.6, 4.8]
-            }]
+            series: passedData
         });
 }
