@@ -232,6 +232,7 @@ function makeWeekTime(passedUnits, passedDaysPer, passedDiv) {//stopped here, zm
     weekholder = new Array();
     for (zm = 0; zm < passedUnits; zm++) {
         var dater = new Date();
+        dater.setHours(23,59,59);
         var aEndTime = ((dater.getTime()) / 1000) - (60*60*24*passedDaysPer*zm);
         var aStartTime = aEndTime - (60*60*24*passedDaysPer);
         //console.log(aStartTime + ' ' +  aEndTime);
@@ -259,6 +260,7 @@ function makeDayTime(passedUnits, passedDaysPer, passedDiv) {//stopped here, zm 
     dayholder = new Array();
     for (zm = 0; zm < passedUnits; zm++) {
         var dater = new Date();
+        dater.setHours(23,59,59);
         var aEndTime = ((dater.getTime()) / 1000) - (60*60*24*passedDaysPer*zm);
         var aStartTime = aEndTime - (60*60*24*passedDaysPer);
         //console.log(aStartTime + ' ' +  aEndTime);
@@ -460,9 +462,6 @@ function line(passedData, passedTitle, passedDescription, div, passedXAxis) {
                 series: {
                     threshold: 0
                 }
-            },
-            tooltip: {
-                valueSuffix: '°C'
             },
             legend: {
                 layout: 'vertical',
