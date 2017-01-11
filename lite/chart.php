@@ -1,6 +1,8 @@
 <?php
 	// Dan Berkowitz, berkod2@rpi.edu, dansberkowitz@gmail.com, Feb 2012
+	// Updated from PHP 5 to PHP 7, Joshua Rosenfeld, rosenj5@rpi.edu, jomaxro@gmail.com, Jan 2017
 	include '../core.php';
+	 $mysqli = mysqli_connect("localhost", "root", "bacon", "QuickLogs") or die("Could Not Connect To MYSQL or DATABASE");
 	if (!isset($_REQUEST['chart']))
 	{
 		echo "Invalid Post";
@@ -15,31 +17,31 @@
 			
 			$users = array ();
 			$problems = array();
-			$new_result = mysql_query("SELECT `ID`,`username` FROM `Users`;");
+			$new_result = mysqli_query($mysqli, "SELECT `ID`,`username` FROM `Users`;");
 			if ($new_result)
 			{
-				while ($row = mysql_fetch_array($new_result))
+				while ($row = mysqli_fetch_array($new_result))
 				{
 					$users[$row['ID']] = $row['username'];
 				}
 			}
-			$new_result = mysql_query("SELECT `index`,`problem` FROM `Types`;");
+			$new_result = mysqli_query($mysqli, "SELECT `index`,`problem` FROM `Types`;");
 			if ($new_result)
 			{
-				while ($row = mysql_fetch_array($new_result))
+				while ($row = mysqli_fetch_array($new_result))
 				{
 					$problems[$row['index']] = $row['problem'];
 				}
 			}
-			$new_result = mysql_query("SELECT * FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - (6 * 30 * 24 * 60 * 60));");
+			$new_result = mysqli_query($mysqli, "SELECT * FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - (6 * 30 * 24 * 60 * 60));");
 			if ($new_result)
 			{
-				while ($row = mysql_fetch_array($new_result))
+				while ($row = mysqli_fetch_array($new_result))
 				{
 					echo $row['timestamp'] . "," . $problems[$row['type']] . "," . $users[$row['userid']] . "\n";
 				}
 			}
-
+	
 			break;
 			
 		case "excel_12months":
@@ -50,31 +52,31 @@
 			
 			$users = array ();
 			$problems = array();
-			$new_result = mysql_query("SELECT `ID`,`username` FROM `Users`;");
+			$new_result = mysqli_query($mysqli, "SELECT `ID`,`username` FROM `Users`;");
 			if ($new_result)
 			{
-				while ($row = mysql_fetch_array($new_result))
+				while ($row = mysqli_fetch_array($new_result))
 				{
 					$users[$row['ID']] = $row['username'];
 				}
 			}
-			$new_result = mysql_query("SELECT `index`,`problem` FROM `Types`;");
+			$new_result = mysqli_query($mysqli, "SELECT `index`,`problem` FROM `Types`;");
 			if ($new_result)
 			{
-				while ($row = mysql_fetch_array($new_result))
+				while ($row = mysqli_fetch_array($new_result))
 				{
 					$problems[$row['index']] = $row['problem'];
 				}
 			}
-			$new_result = mysql_query("SELECT * FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - (12 * 30 * 24 * 60 * 60));");
+			$new_result = mysqli_query($mysqli, "SELECT * FROM `Logs` WHERE `timestamp`>((SELECT UNIX_TIMESTAMP(CURRENT_TIMESTAMP)) - (12 * 30 * 24 * 60 * 60));");
 			if ($new_result)
 			{
-				while ($row = mysql_fetch_array($new_result))
+				while ($row = mysqli_fetch_array($new_result))
 				{
 					echo $row['timestamp'] . "," . $problems[$row['type']] . "," . $users[$row['userid']] . "\n";
 				}
 			}
-
+	
 			break;
 			
 		case "excel_all":
@@ -85,26 +87,26 @@
 			
 			$users = array ();
 			$problems = array();
-			$new_result = mysql_query("SELECT `ID`,`username` FROM `Users`;");
+			$new_result = mysqli_query($mysqli, "SELECT `ID`,`username` FROM `Users`;");
 			if ($new_result)
 			{
-				while ($row = mysql_fetch_array($new_result))
+				while ($row = mysqli_fetch_array($new_result))
 				{
 					$users[$row['ID']] = $row['username'];
 				}
 			}
-			$new_result = mysql_query("SELECT `index`,`problem` FROM `Types`;");
+			$new_result = mysqli_query($mysqli, "SELECT `index`,`problem` FROM `Types`;");
 			if ($new_result)
 			{
-				while ($row = mysql_fetch_array($new_result))
+				while ($row = mysqli_fetch_array($new_result))
 				{
 					$problems[$row['index']] = $row['problem'];
 				}
 			}
-			$new_result = mysql_query("SELECT * FROM `Logs`;");
+			$new_result = mysqli_query($mysqli, "SELECT * FROM `Logs`;");
 			if ($new_result)
 			{
-				while ($row = mysql_fetch_array($new_result))
+				while ($row = mysqli_fetch_array($new_result))
 				{
 					echo $row['timestamp'] . "," . $problems[$row['type']] . "," . $users[$row['userid']] . "\n";
 				}
@@ -114,7 +116,7 @@
 			$returning_Data = array();
 			if (isset($_REQUEST['startTime']) && isset($_REQUEST['endTime']))
 			{
-				$new_result = mysql_query("SELECT DISTINCT `type` AS Type_ID FROM `Logs` WHERE `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");");
+				$new_result = mysqli_query($mysqli, "SELECT DISTINCT `type` AS Type_ID FROM `Logs` WHERE `timestamp`>(" . mysqli_real_escape_string($mysqli, $_REQUEST['startTime']) . ") AND `timestamp`<(" . mysqli_real_escape_string($mysqli, $_REQUEST['endTime']) . ");");
 				//echo "SELECT DISTINCT `type` AS Type_ID FROM `Logs` WHERE `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");";
 				if ($new_result)
 				{
@@ -122,16 +124,16 @@
 					{
 						array_push($returning_Data, $_REQUEST['id']);
 					}
-					while ($row = mysql_fetch_array($new_result))
+					while ($row = mysqli_fetch_array($new_result))
 					{
-						$result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `type`='" . $row['Type_ID'] . "' AND `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");");
+						$result = mysqli_query($mysqli, "SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `type`='" . $row['Type_ID'] . "' AND `timestamp`>(" . mysqli_real_escape_string($mysqli, $_REQUEST['startTime']) . ") AND `timestamp`<(" . mysqli_real_escape_string($mysqli, $_REQUEST['endTime']) . ");");
 						if ($result)
 						{
-							$rowz = mysql_fetch_array($result);	
-							$name = mysql_query("SELECT `problem` FROM `Types` WHERE `index`='" . $row['Type_ID'] . "'");
+							$rowz = mysqli_fetch_array($result);	
+							$name = mysqli_query($mysqli, "SELECT `problem` FROM `Types` WHERE `index`='" . $row['Type_ID'] . "'");
 							if ($name)
 							{
-								$rowy = mysql_fetch_array($name);
+								$rowy = mysqli_fetch_array($name);
 								$tempArray = array();
 								array_push($tempArray, $rowy['problem']);
 								
@@ -192,19 +194,19 @@
 			if (isset($_REQUEST['startTime']) && isset($_REQUEST['endTime']))
 			{
 				$returned_result = array();
-				$new_result = mysql_query("SELECT DISTINCT `userid` AS User_ID FROM `Logs` WHERE `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");");
+				$new_result = mysqli_query($mysqli, "SELECT DISTINCT `userid` AS User_ID FROM `Logs` WHERE `timestamp`>(" . mysqli_real_escape_string($mysqli, $_REQUEST['startTime']) . ") AND `timestamp`<(" . mysqli_real_escape_string($mysqli, $_REQUEST['endTime']) . ");");
 				if ($new_result)
 				{
-					while ($row = mysql_fetch_array($new_result))
+					while ($row = mysqli_fetch_array($new_result))
 					{
-						$result = mysql_query("SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `userid`='" . $row['User_ID'] . "' AND `timestamp`>(" . mysql_real_escape_string($_REQUEST['startTime']) . ") AND `timestamp`<(" . mysql_real_escape_string($_REQUEST['endTime']) . ");");
+						$result = mysqli_query($mysqli, "SELECT COUNT(*) AS RecordNumber FROM `Logs` WHERE `userid`='" . $row['User_ID'] . "' AND `timestamp`>(" . mysqli_real_escape_string($mysqli, $_REQUEST['startTime']) . ") AND `timestamp`<(" . mysqli_real_escape_string($mysqli, $_REQUEST['endTime']) . ");");
 						if ($result)
 						{
-							$rowz = mysql_fetch_array($result);
-							$name = mysql_query("SELECT `username` FROM `Users` WHERE `ID`='" . $row['User_ID'] . "';");
+							$rowz = mysqli_fetch_array($result);
+							$name = mysqli_query($mysqli, "SELECT `username` FROM `Users` WHERE `ID`='" . $row['User_ID'] . "';");
 							if ($name)
 							{
-								$rowy = mysql_fetch_array($name);
+								$rowy = mysqli_fetch_array($name);
 								$thisRow = array();
 								array_push($thisRow, $rowy['username']);
 								array_push($thisRow, intval($rowz['RecordNumber']));
@@ -252,6 +254,6 @@
 				
 			break;
 	}
-
-	QuickLogs::db_disconnect();
-?>
+	
+	QuickLogs::db_disconnect($mysqli);
+	?>
